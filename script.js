@@ -148,6 +148,25 @@ const tictactoeFactory = () => {
     return { CellToIndex, getAtCell, setAtCell, clearBoard, getState, isWinFor, isTie, isFull, getCurrentSign, setCurrentSign, toggleCurrentSign, setAtIndexCurrentSign, setAtCellCurrentSign, restart };
 };
 
+var gameOverMenu = (function() {
+    var gameOverMenuDiv = document.querySelector('#gameOverMenu');
+    var playAgainButton = gameOverMenuDiv.querySelector('button');
+
+    const showGameOverMenu = () => {
+        gameOverMenuDiv.classList.remove('gameOverMenuHide');
+    }
+
+    const hideGameOverMenu = () => {
+        gameOverMenuDiv.classList.add('gameOverMenuHide');
+    }
+
+    const setOnPlayAgainCallback = (func) => {
+        playAgainButton.onclick = func;
+    }
+
+    return { showGameOverMenu, hideGameOverMenu, setOnPlayAgainCallback }
+})();
+
 var game = (function() {
     var gameBoardDiv = document.querySelector('#tic-tac-toe-board');
     var gameCells = new Array(9);
@@ -166,17 +185,28 @@ var game = (function() {
                 onGameEnd(gameState);
             }
 
+            // Set button's sign
             return currentSign;
         });
     }
 
-    const onGameEnd = (state) => {
-        // Disable all buttons
+    const disableAllButtons = (value) => {
         for (gameCell of gameCells) {
-            gameCell.disableButton(true);
+            gameCell.disableButton(value);
         }
-
-        // TODO: Show game over menu
-        console.log("game enmded, pls dont do anythinmg");
     }
+
+    const onGameEnd = (state) => {
+        disableAllButtons(true);
+        gameOverMenu.showGameOverMenu();
+    }
+
+    gameOverMenu.setOnPlayAgainCallback(() => {
+        gameOverMenu.hideGameOverMenu();
+        disableAllButtons(false);
+        tictactoe.restart();
+        for (gameCell of gameCells) {
+            gameCell.setValue('-');
+        }
+    });
 })();

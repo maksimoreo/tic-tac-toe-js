@@ -15,6 +15,8 @@ html { box-sizing: border-box; }
 
 html {
     background: rgb(255, 217, 134);
+    font-family: 'Courier New', Courier, monospace;
+    color: #222;
 }
 
 .container {
@@ -25,11 +27,25 @@ html {
     align-items: center;
 }
 
+.align-center {
+    text-align: center;
+}
+
+h1 {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 18px;
+}
+
 /* game */
 
 .game-board-container {
-    width: min(90vh, 90vw);
-    height: min(90vh, 90vw);
+    width: min(80vh, 80vw);
+    height: min(80vh, 80vw);
+    margin: 0 auto;
     position: relative;
 }
 
@@ -83,4 +99,32 @@ html {
 
 svg {
     display: block;
+}
+
+/* game over menu */
+
+#gameOverMenu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 40px black;
+    z-index: 9999;
+    transition: all 0.2s;
+}
+
+.gameOverMenuHide {
+    top: -50% !important;
+    transform: translate(-50%, 0) !important;
+}
+
+#gameOverMenu p {
+    margin-bottom: 10px;
+}
+
+#gameOverMenu button {
+    width: 100%;
 }

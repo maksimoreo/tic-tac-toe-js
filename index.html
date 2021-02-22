@@ -9,23 +9,31 @@
   <title>TicTacToeJS</title>
 </head>
 <body>
+  <div id="gameOverMenu" class="gameOverMenuHide">
+      <p>Cross won!</p>
+      <button>play again</button>
+  </div>
   <div class="container">
-    <div class="game-board-container">
-      <div class="game-board-lines">
-        <svg style="stroke: rgb(121, 58, 36);" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <g stroke-width="5" stroke-linecap="round">
-            <line x1="4" y1="33" x2="96" y2="33" />
-            <line x1="4" y1="67" x2="96" y2="67" />
-            <line x1="33" y1="4" x2="33" y2="96" />
-            <line x1="67" y1="4" x2="67" y2="96" />
-          </g>
-        </svg>
+    <div>
+      <h1 class="align-center">Tic Tac Toe</h1>
+      <p class="align-center">Play Tic Tac Toe in browser with your friends!</p>
+      <div class="game-board-container">
+        <div class="game-board-lines">
+          <svg style="stroke: rgb(121, 58, 36);" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <g stroke-width="5" stroke-linecap="round">
+              <line x1="4" y1="33" x2="96" y2="33" />
+              <line x1="4" y1="67" x2="96" y2="67" />
+              <line x1="33" y1="4" x2="33" y2="96" />
+              <line x1="67" y1="4" x2="67" y2="96" />
+            </g>
+          </svg>
+        </div>
+        <div id="tic-tac-toe-board">
+        </div>
       </div>
-      <div id="tic-tac-toe-board">
-      </div>
+      <p class="align-center"><a href="https://www.theodinproject.com/courses/javascript/lessons/tic-tac-toe-javascript">The Odin Project</a> | <a href="">GitHub</a></p>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
