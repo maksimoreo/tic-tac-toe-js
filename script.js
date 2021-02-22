@@ -23,9 +23,17 @@ const gameCellFactory = (gameCellIndex) => {
         }
     };
 
+    const disableButton = (value) => {
+        gameCellButton.disabled = value;
+    }
+
     const setOnClickCallback = (func) => {
         gameCellButton.onclick = () => {
-            func(index);
+            var return_value = func(index);
+
+            if (['x', 'o', '-'].includes(return_value)) {
+                setValue(return_value);
+            }
         }
     }
 
@@ -45,38 +53,130 @@ const gameCellFactory = (gameCellIndex) => {
     var gameCircleGroup = gameCellDiv.querySelector('.game-circle');
     var gameCellButton = gameCellDiv.querySelector('.game-cell-button');
 
-    return { setValue, getValue, getElement, setOnClickCallback };
+    return { setValue, getValue, getElement, setOnClickCallback, disableButton };
 };
 
-const gameBoard = (function() {
-    const gameCellCallback = (index) => {
-        console.log("Pressed button: " + index);
-        board[index].setValue('x');
-    };
+const tictactoeFactory = () => {
+    // Converts (i, j) to (index)
+    const CellToIndex = (i, j) => i * 3 + j;
 
-    const setCell = (index, value) => {
-        board[index].setValue(value);
-    };
+    const getAt = (index) => board[index];
+    const setAt = (index, value) => { board[index] = value; };
+    const getAtCell = (i, j) => getAt(CellToIndex(i, j));
+    const setAtCell = (i, j, value) => { setAt(CellToIndex(i, j), value); };
 
     const clearBoard = () => {
         for (var i = 0; i < 9; i++) {
-            board[i].setValue('-');
+            board[i] = '-';
         }
+    }
+
+    const isWinFor = (sign) => {
+        // Horizontal and Vertical
+        for (var i = 0; i < 3; i++) {
+            var sum_v = 0;
+            var sum_h = 0;
+
+            for (var j = 0; j < 3; j++) {
+                sum_v += getAtCell(i, j) == sign;
+                sum_h += getAtCell(j, i) == sign;
+            }
+
+            if (sum_v == 3 || sum_h == 3) {
+                return true;
+            }
+        }
+
+        // Diagonals
+        var sum_d1 = 0;
+        var sum_d2 = 0;
+
+        for (var i = 0; i < 3; i++) {
+            sum_d1 += getAtCell(i, i) == sign;
+            sum_d2 += getAtCell(i, 2 - i) == sign;
+        }
+
+        if (sum_d1 == 3 || sum_d2 == 3) {
+            return true;
+        }
+
+        return false;
+    }
+
+    const isFull = () => board.reduce((acc, value) => acc += value === '-', 0) == 0;
+
+    const isTie = () => isFull() && !isWinFor('x') && !isWinFor('y');
+
+    const getState = () => {
+        if (isWinFor('x')) {
+            return 'x';
+        } else if (isWinFor('o')) {
+            return 'o';
+        } else if (isFull()) {
+            return 'tie';
+        } else {
+            return 'in progress';
+        }
+    }
+
+    const getCurrentSign = () => currentSign;
+    const setCurrentSign = (newSign) => { currentSign = newSign; };
+    const toggleCurrentSign = () => { currentSign = currentSign == 'x' ? 'o' : 'x'; };
+
+    const setAtIndexCurrentSign = (index) => {
+        setAt(index, currentSign);
+        toggleCurrentSign();
+    }
+    const setAtCellCurrentSign = (i, j) => {
+        setAtCell(i, j, currentSign);
+        toggleCurrentSign();
+    };
+
+    const restart = () => {
+        currentSign = 'x';
+        clearBoard();
     }
 
     // Initialization
     var board = new Array(9);
-    var gameBoardDiv = document.querySelector('#game-board');
+    var currentSign = 'x';
 
     for (var i = 0; i < 9; i++) {
-        board[i] = gameCellFactory(i);
-        gameBoardDiv.appendChild(board[i].getElement());
-
-        board[i].setOnClickCallback(gameCellCallback);
+        board[i] = '-';
     }
 
-    board[4].setValue('x');
-    board[5].setValue('o');
+    return { CellToIndex, getAtCell, setAtCell, clearBoard, getState, isWinFor, isTie, isFull, getCurrentSign, setCurrentSign, toggleCurrentSign, setAtIndexCurrentSign, setAtCellCurrentSign, restart };
+};
 
-    return { setCell, clearBoard, board };
+var game = (function() {
+    var gameBoardDiv = document.querySelector('#tic-tac-toe-board');
+    var gameCells = new Array(9);
+    var tictactoe = tictactoeFactory();
+
+    for (var i = 0; i < 9; i++) {
+        gameCells[i] = gameCellFactory(i);
+        gameBoardDiv.appendChild(gameCells[i].getElement());
+
+        gameCells[i].setOnClickCallback((index) => {
+            var currentSign = tictactoe.getCurrentSign();
+            tictactoe.setAtIndexCurrentSign(index);
+
+            var gameState = tictactoe.getState();
+            if (gameState != "in progress") {
+                onGameEnd(gameState);
+            }
+
+            return currentSign;
+        });
+    }
+
+    const onGameEnd = (state) => {
+        // Disable all buttons
+        for (gameCell of gameCells) {
+            gameCell.disableButton(true);
+        }
+
+        // TODO: Show game over menu
+        console.log("game enmded, pls dont do anythinmg");
+    }
 })();

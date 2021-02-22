@@ -40,7 +40,7 @@ html {
     z-index: -1;
 }
 
-#game-board {
+#tic-tac-toe-board {
     display: grid;
     grid-template-columns: repeat(3, 33.3333%);
     grid-template-rows: repeat(3, 33.3333%);
