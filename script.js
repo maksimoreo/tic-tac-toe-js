@@ -149,15 +149,24 @@ const tictactoeFactory = () => {
 };
 
 var gameOverMenu = (function() {
-    var gameOverMenuDiv = document.querySelector('#gameOverMenu');
+    var gameOverMenuDiv = document.querySelector('#game-over-menu');
     var playAgainButton = gameOverMenuDiv.querySelector('button');
+    var gameOverMessageP = gameOverMenuDiv.querySelector('#game-over-text');
 
-    const showGameOverMenu = () => {
-        gameOverMenuDiv.classList.remove('gameOverMenuHide');
+    const showGameOverMenu = (state) => {
+        gameOverMenuDiv.classList.remove('game-over-menu-hide');
+
+        if (state == 'x') {
+            gameOverMessageP.textContent = 'Cross won!';
+        } else if (state == 'o') {
+            gameOverMessageP.textContent = 'Circle won!';
+        } else if (state == 'tie') {
+            gameOverMessageP.textContent = 'Tie!';
+        }
     }
 
     const hideGameOverMenu = () => {
-        gameOverMenuDiv.classList.add('gameOverMenuHide');
+        gameOverMenuDiv.classList.add('game-over-menu-hide');
     }
 
     const setOnPlayAgainCallback = (func) => {
@@ -198,7 +207,7 @@ var game = (function() {
 
     const onGameEnd = (state) => {
         disableAllButtons(true);
-        gameOverMenu.showGameOverMenu();
+        gameOverMenu.showGameOverMenu(state);
     }
 
     gameOverMenu.setOnPlayAgainCallback(() => {

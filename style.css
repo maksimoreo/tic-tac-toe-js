@@ -103,7 +103,7 @@ svg {
 
 /* game over menu */
 
-#gameOverMenu {
+#game-over-menu {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -116,15 +116,15 @@ svg {
     transition: all 0.2s;
 }
 
-.gameOverMenuHide {
+.game-over-menu-hide {
     top: -50% !important;
     transform: translate(-50%, 0) !important;
 }
 
-#gameOverMenu p {
+#game-over-text {
     margin-bottom: 10px;
 }
 
-#gameOverMenu button {
+#game-over-menu button {
     width: 100%;
 }
